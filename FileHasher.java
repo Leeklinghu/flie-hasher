@@ -12,7 +12,10 @@ public class FileHasher {
         try {
             // TODO (FH-1): create the JavaFileSystem directory
             File folder = new File("JavaFileSystem");
-            folder.mkdir();
+            if (!folder.exists()) {
+                folder.mkdir();
+            }
+
             // TODO (FH-2): create notes.txt, data.txt, log.txt and write a sentence into
             // each
             // TODO (FH-3): read each file back, print it, and write all three into
