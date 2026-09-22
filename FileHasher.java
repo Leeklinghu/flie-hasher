@@ -54,7 +54,13 @@ public class FileHasher {
             }
             backupWriter.close();
             // TODO (FH-4): print each file's name next to hashFile(path)
-        } catch (IOException e) {
+            System.out.println();
+            for(File filetemp: filearray){
+                String hash = hashFile(filetemp.getPath());
+                System.out.println(filetemp.getName()+": "+ hash);
+            }
+
+        } catch (IOException| NoSuchAlgorithmException e) {
             System.out.println("File error: " + e.getMessage());
         }
     }
@@ -63,8 +69,26 @@ public class FileHasher {
      * Reads the file at filePath and returns its SHA-256 hash
      * as a lowercase 64-character hexadecimal string.
      */
-    public static String hashFile(String filePath) throws IOException {
+    public static String hashFile(String filePath) throws IOException, NoSuchAlgorithmException {
         // TODO (FH-4): read the whole file, digest it, convert the bytes to hex
-        return "";
+        FileReader reader = new FileReader(filePath);
+        StringBuilder toSave = new StringBuilder();
+        int character = reader.read();
+        while(character!=-1){
+            toSave.append((char)character);
+             character = reader.read();
+        }
+        reader.close();
+        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+
+        byte[] hashBytes = digest.digest(toSave.toString().getBytes("UTF-8"));
+        StringBuilder hex = new StringBuilder();
+
+        for (byte bite : hashBytes) {
+            hex.append(String.format("%02x", bite & 0xff));
+        }  
+
+        return hex.toString();
+    
     }
 }
