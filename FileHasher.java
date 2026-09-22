@@ -44,11 +44,14 @@ public class FileHasher {
             for (File filetemp : filearray) {
                 FileReader reader = new FileReader(filetemp);
                 int character = reader.read();
+                System.out.print(filetemp.getName() + ": ");
                 while (character != -1) {
                     System.out.print((char) character);
                     backupWriter.write(character);
                     character = reader.read();
                 }
+                System.out.println();
+                backupWriter.write(System.lineSeparator());
                 reader.close();
 
             }
