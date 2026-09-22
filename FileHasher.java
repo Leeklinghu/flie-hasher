@@ -34,6 +34,25 @@ public class FileHasher {
             writer3.close();
             // TODO (FH-3): read each file back, print it, and write all three into
             // Backup/backup.txt
+            File Backup = new File(folder, "Backup");
+            if (!Backup.exists()) {
+                Backup.mkdir();
+            }
+            File backupFile = new File(Backup, "backup.txt");
+            FileWriter backupWriter = new FileWriter(backupFile);
+            File[] filearray = { notes, data, log };
+            for (File filetemp : filearray) {
+                FileReader reader = new FileReader(filetemp);
+                int character = reader.read();
+                while (character != -1) {
+                    System.out.print((char) character);
+                    backupWriter.write(character);
+                    character = reader.read();
+                }
+                reader.close();
+
+            }
+            backupWriter.close();
             // TODO (FH-4): print each file's name next to hashFile(path)
         } catch (IOException e) {
             System.out.println("File error: " + e.getMessage());
