@@ -5,6 +5,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 
 public class FileHasher {
 
@@ -58,16 +60,15 @@ public class FileHasher {
             backupWriter.close();
             // TODO (FH-4): print each file's name next to hashFile(path)
             System.out.println();
-            for(File filetemp: filearray){
+            for (File filetemp : filearray) {
                 String hash = hashFile(filetemp.getPath());
-                System.out.println(filetemp.getName()+": "+ hash);
+                System.out.println(filetemp.getName() + ": " + hash);
 
             }
-        File empty = new File(folder, "empty.txt");
-        System.out.println("empty.txt: " +hashFile(empty.getPath()));
-        
-        } 
-        catch (IOException| NoSuchAlgorithmException e) {
+            File empty = new File(folder, "empty.txt");
+            System.out.println("empty.txt: " + hashFile(empty.getPath()));
+
+        } catch (IOException | NoSuchAlgorithmException e) {
             System.out.println("File error: " + e.getMessage());
         }
     }
@@ -78,12 +79,16 @@ public class FileHasher {
      */
     public static String hashFile(String filePath) throws IOException, NoSuchAlgorithmException {
         // TODO (FH-4): read the whole file, digest it, convert the bytes to hex
+        Path path = Path.of(filePath);
+        if (!Files.isRegularFile(path)) {
+            throw new IOException("No such files: " + filePath);
+        }
         FileReader reader = new FileReader(filePath);
         StringBuilder toSave = new StringBuilder();
         int character = reader.read();
-        while(character!=-1){
-            toSave.append((char)character);
-             character = reader.read();
+        while (character != -1) {
+            toSave.append((char) character);
+            character = reader.read();
         }
         reader.close();
         MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -93,9 +98,9 @@ public class FileHasher {
 
         for (byte bite : hashBytes) {
             hex.append(String.format("%02x", bite & 0xff));
-        }  
+        }
 
         return hex.toString();
-    
+
     }
 }
