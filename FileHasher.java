@@ -20,7 +20,7 @@ public class FileHasher {
             // each
             File notes = new File(folder, "notes.txt");
             FileWriter writer = new FileWriter(notes);
-            writer.write("This is my notes");
+            writer.write("This is my notes version 2");
             writer.close();
 
             File data = new File(folder, "data.txt");
@@ -61,9 +61,13 @@ public class FileHasher {
             for(File filetemp: filearray){
                 String hash = hashFile(filetemp.getPath());
                 System.out.println(filetemp.getName()+": "+ hash);
-            }
 
-        } catch (IOException| NoSuchAlgorithmException e) {
+            }
+        File empty = new File(folder, "empty.txt");
+        System.out.println("empty.txt: " +hashFile(empty.getPath()));
+        
+        } 
+        catch (IOException| NoSuchAlgorithmException e) {
             System.out.println("File error: " + e.getMessage());
         }
     }
